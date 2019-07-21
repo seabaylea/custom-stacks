@@ -16,7 +16,9 @@
   "dependencies": {
     "@cloudnative/health-connect": "^2.0.0",
     "appmetrics-prometheus": "^2.0.0",
-    "express": "~4.16.0"
+    "express": "~4.16.0",
+    "dtrace-express": "3.0.0",
+    "express-tracer": "git+https://github.com/No9/express-tracer.git"
   },
   "devDependencies": {
     "chai": "^4.2.0",

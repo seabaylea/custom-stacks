@@ -4,11 +4,18 @@ if (!process.env.NODE_ENV || !process.env.NODE_ENV === 'production') {
 }
 const express = require('express');
 const health = require('@cloudnative/health-connect');
+var expresstracer = require('express-tracer');
+var DTE = require('dtrace-express');
+var dte = new DTE();
 const fs = require('fs');
 
 require('appmetrics-prometheus').attach();
 
 const app = express();
+
+expresstracer(app);
+app.instrument(dte.instrument);
+app.use(dte.start);
 
 const basePath = __dirname + '/user-app/';
 
@@ -35,6 +42,8 @@ app.use('/health', health.HealthEndpoint(healthcheck));
 app.get('*', (req, res) => {
   res.status(404).send("Not Found");
 });
+
+app.use(dte.finish);
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
